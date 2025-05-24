@@ -3,86 +3,69 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
-    --background: 253 244 255; /* fantasy-50 */
-    --foreground: 112 26 117; /* fantasy-900 */
+    --background: 248 250 252;
+    --foreground: 30 41 59;
 
     --card: 255 255 255;
-    --card-foreground: 112 26 117;
+    --card-foreground: 30 41 59;
 
     --popover: 255 255 255;
-    --popover-foreground: 112 26 117;
+    --popover-foreground: 30 41 59;
 
-    --primary: 217 70 239; /* fantasy-500 */
+    --primary: 147 51 234;
     --primary-foreground: 255 255 255;
 
-    --secondary: 245 208 254; /* fantasy-200 */
-    --secondary-foreground: 162 28 175; /* fantasy-700 */
+    --secondary: 241 245 249;
+    --secondary-foreground: 51 65 85;
 
-    --muted: 239 246 255; /* dream-50 */
+    --muted: 241 245 249;
     --muted-foreground: 100 116 139;
 
-    --accent: 191 219 254; /* dream-200 */
-    --accent-foreground: 30 64 175; /* dream-800 */
+    --accent: 241 245 249;
+    --accent-foreground: 51 65 85;
 
     --destructive: 239 68 68;
     --destructive-foreground: 255 255 255;
 
-    --border: 245 208 254; /* fantasy-200 */
-    --input: 245 208 254;
-    --ring: 217 70 239; /* fantasy-500 */
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --ring: 147 51 234;
 
     --radius: 0.75rem;
-
-    --sidebar-background: 255 255 255;
-    --sidebar-foreground: 112 26 117;
-    --sidebar-primary: 217 70 239;
-    --sidebar-primary-foreground: 255 255 255;
-    --sidebar-accent: 245 208 254;
-    --sidebar-accent-foreground: 162 28 175;
-    --sidebar-border: 245 208 254;
-    --sidebar-ring: 217 70 239;
   }
 
   .dark {
-    --background: 30 27 75; /* dream-900 */
-    --foreground: 239 246 255; /* dream-50 */
+    --background: 15 23 42;
+    --foreground: 248 250 252;
 
-    --card: 30 27 75;
-    --card-foreground: 239 246 255;
+    --card: 15 23 42;
+    --card-foreground: 248 250 252;
 
-    --popover: 30 27 75;
-    --popover-foreground: 239 246 255;
+    --popover: 15 23 42;
+    --popover-foreground: 248 250 252;
 
-    --primary: 147 197 253; /* dream-300 */
-    --primary-foreground: 30 27 75;
+    --primary: 168 85 247;
+    --primary-foreground: 15 23 42;
 
-    --secondary: 30 64 175; /* dream-800 */
-    --secondary-foreground: 191 219 254;
+    --secondary: 30 41 59;
+    --secondary-foreground: 226 232 240;
 
-    --muted: 30 58 138; /* dream-800 */
-    --muted-foreground: 147 197 253;
+    --muted: 30 41 59;
+    --muted-foreground: 148 163 184;
 
-    --accent: 29 78 216; /* dream-700 */
-    --accent-foreground: 191 219 254;
+    --accent: 30 41 59;
+    --accent-foreground: 226 232 240;
 
     --destructive: 220 38 38;
-    --destructive-foreground: 239 246 255;
+    --destructive-foreground: 248 250 252;
 
-    --border: 30 64 175;
-    --input: 30 64 175;
-    --ring: 147 197 253;
-    --sidebar-background: 30 27 75;
-    --sidebar-foreground: 239 246 255;
-    --sidebar-primary: 147 197 253;
-    --sidebar-primary-foreground: 30 27 75;
-    --sidebar-accent: 30 64 175;
-    --sidebar-accent-foreground: 191 219 254;
-    --sidebar-border: 30 64 175;
-    --sidebar-ring: 147 197 253;
+    --border: 30 41 59;
+    --input: 30 41 59;
+    --ring: 168 85 247;
   }
 }
 
@@ -93,30 +76,54 @@
 
   body {
     @apply bg-background text-foreground font-body;
-    background: linear-gradient(-45deg, #fdf4ff, #eff6ff, #fef7f0, #f0f9ff);
-    background-size: 400% 400%;
-    animation: gradient-shift 15s ease-in-out infinite;
+    font-family: 'Nunito', 'Inter', system-ui, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading;
+    font-family: 'Nunito', 'Inter', system-ui, sans-serif;
   }
 }
 
-@layer components {
-  .glass-card {
-    @apply bg-white/20 backdrop-blur-md border border-white/30 rounded-2xl shadow-xl;
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
+}
 
-  .gradient-text {
-    @apply bg-gradient-to-r from-fantasy-500 via-dream-500 to-blush-400 bg-clip-text text-transparent;
+/* Custom animations */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
   }
+  50% {
+    background-position: 100% 50%;
+  }
+}
 
-  .hover-lift {
-    @apply transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-2xl;
-  }
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
 
-  .glow-on-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:shadow-fantasy-200/50;
-  }
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

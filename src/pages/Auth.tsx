@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart } from "lucide-react";
+import { Heart, Sparkles } from "lucide-react";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -34,20 +34,21 @@ const Auth = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate auth success and redirect to dashboard
     navigate("/dashboard");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center space-x-2 mb-4">
-            <Heart className="text-fantasy-500" size={32} />
-            <span className="font-heading font-bold text-2xl gradient-text">Fandom Fusion</span>
+            <Heart className="text-purple-500" size={32} />
+            <span className="font-bold text-2xl bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
+              Fandom Fusion
+            </span>
           </Link>
-          <h1 className="font-heading font-bold text-3xl mb-2">
+          <h1 className="font-bold text-3xl mb-2 text-gray-800">
             {isLogin ? "Welcome Back!" : "Join the Fusion"}
           </h1>
           <p className="text-gray-600">
@@ -58,9 +59,9 @@ const Auth = () => {
           </p>
         </div>
 
-        <Card className="glass-card border-0 glow-on-hover">
+        <Card className="bg-white/60 backdrop-blur-sm border-0 shadow-xl">
           <CardHeader>
-            <CardTitle className="text-center">
+            <CardTitle className="text-center text-gray-800">
               {isLogin ? "Sign In" : "Create Account"}
             </CardTitle>
           </CardHeader>
@@ -68,38 +69,38 @@ const Auth = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
                 <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
+                  <Label htmlFor="name" className="text-gray-700">Full Name</Label>
                   <Input 
                     id="name" 
                     placeholder="Enter your name" 
-                    className="border-fantasy-200 focus:border-fantasy-400"
+                    className="border-purple-200 focus:border-purple-400 bg-white/80"
                   />
                 </div>
               )}
               
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-gray-700">Email</Label>
                 <Input 
                   id="email" 
                   type="email" 
                   placeholder="Enter your email" 
-                  className="border-fantasy-200 focus:border-fantasy-400"
+                  className="border-purple-200 focus:border-purple-400 bg-white/80"
                 />
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password" className="text-gray-700">Password</Label>
                 <Input 
                   id="password" 
                   type="password" 
                   placeholder="Enter your password" 
-                  className="border-fantasy-200 focus:border-fantasy-400"
+                  className="border-purple-200 focus:border-purple-400 bg-white/80"
                 />
               </div>
 
               {!isLogin && (
                 <div className="space-y-3">
-                  <Label className="text-base font-semibold">
+                  <Label className="text-base font-semibold text-gray-700">
                     Choose Your Fandoms ✨
                   </Label>
                   <p className="text-sm text-gray-600">
@@ -109,10 +110,10 @@ const Auth = () => {
                     {fandoms.map((fandom) => (
                       <div 
                         key={fandom.id}
-                        className={`flex items-center space-x-2 p-3 rounded-lg border-2 transition-all duration-200 hover-lift ${
+                        className={`flex items-center space-x-2 p-3 rounded-lg border-2 transition-all duration-200 hover:scale-105 ${
                           selectedFandoms.includes(fandom.id)
-                            ? "border-fantasy-400 bg-fantasy-50"
-                            : "border-gray-200 hover:border-fantasy-200"
+                            ? "border-purple-400 bg-purple-50"
+                            : "border-gray-200 hover:border-purple-200"
                         }`}
                       >
                         <Checkbox 
@@ -121,7 +122,7 @@ const Auth = () => {
                           onCheckedChange={() => handleFandomToggle(fandom.id)}
                         />
                         <span className="text-lg">{fandom.emoji}</span>
-                        <Label htmlFor={fandom.id} className="text-sm font-medium cursor-pointer">
+                        <Label htmlFor={fandom.id} className="text-sm font-medium cursor-pointer text-gray-700">
                           {fandom.label}
                         </Label>
                       </div>
@@ -132,9 +133,10 @@ const Auth = () => {
 
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-fantasy-500 to-dream-500 hover:from-fantasy-600 hover:to-dream-600 text-white py-3 hover-lift glow-on-hover"
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                {isLogin ? "Sign In" : "Create My Fusion Account"} ✨
+                <Sparkles className="mr-2" size={18} />
+                {isLogin ? "Sign In" : "Create My Fusion Account"}
               </Button>
             </form>
 
@@ -143,7 +145,7 @@ const Auth = () => {
                 {isLogin ? "New to Fandom Fusion? " : "Already have an account? "}
                 <button
                   onClick={() => setIsLogin(!isLogin)}
-                  className="text-fantasy-600 hover:text-fantasy-700 font-semibold underline"
+                  className="text-purple-600 hover:text-purple-700 font-semibold underline"
                 >
                   {isLogin ? "Create an account" : "Sign in"}
                 </button>
