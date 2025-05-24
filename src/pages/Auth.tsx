@@ -7,11 +7,19 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, Sparkles } from "lucide-react";
+import { useApp } from "@/contexts/AppContext";
+import { toast } from "sonner";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [selectedFandoms, setSelectedFandoms] = useState<string[]>([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: ""
+  });
   const navigate = useNavigate();
+  const { setUser } = useApp();
 
   const fandoms = [
     { id: "bts", label: "BTS", emoji: "💜" },
@@ -32,8 +40,42 @@ const Auth = () => {
     );
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.id]: e.target.value
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (!isLogin && !formData.name) {
+      toast.error("Please enter your name");
+      return;
+    }
+
+    if (!isLogin && selectedFandoms.length === 0) {
+      toast.error("Please select at least one fandom");
+      return;
+    }
+
+    // Simulate authentication
+    const user = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: isLogin ? "Fandom Fan" : formData.name,
+      email: formData.email,
+      fandoms: isLogin ? ["bts", "marvel", "disney"] : selectedFandoms,
+      isPrivate: false
+    };
+
+    setUser(user);
+    toast.success(isLogin ? "Welcome back!" : "Account created successfully!");
     navigate("/dashboard");
   };
 
@@ -72,7 +114,9 @@ const Auth = () => {
                   <Label htmlFor="name" className="text-gray-700">Full Name</Label>
                   <Input 
                     id="name" 
-                    placeholder="Enter your name" 
+                    placeholder="Enter your name"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     className="border-purple-200 focus:border-purple-400 bg-white/80"
                   />
                 </div>
@@ -83,7 +127,9 @@ const Auth = () => {
                 <Input 
                   id="email" 
                   type="email" 
-                  placeholder="Enter your email" 
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                   className="border-purple-200 focus:border-purple-400 bg-white/80"
                 />
               </div>
@@ -93,7 +139,9 @@ const Auth = () => {
                 <Input 
                   id="password" 
                   type="password" 
-                  placeholder="Enter your password" 
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleInputChange}
                   className="border-purple-200 focus:border-purple-400 bg-white/80"
                 />
               </div>

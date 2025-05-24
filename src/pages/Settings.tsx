@@ -7,13 +7,18 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, User, Shield, LogOut, Edit } from "lucide-react";
+import { useApp } from "@/contexts/AppContext";
+import { toast } from "sonner";
 
 const Settings = () => {
-  const [name, setName] = useState("Luna Park");
-  const [email, setEmail] = useState("luna@fandomfusion.com");
-  const [selectedFandoms, setSelectedFandoms] = useState<string[]>(["bts", "marvel", "disney"]);
-  const [isPrivate, setIsPrivate] = useState(false);
+  const { user, setUser } = useApp();
   const navigate = useNavigate();
+  
+  const [name, setName] = useState(user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [selectedFandoms, setSelectedFandoms] = useState<string[]>(user?.fandoms || []);
+  const [isPrivate, setIsPrivate] = useState(user?.isPrivate || false);
+  const [newPassword, setNewPassword] = useState("");
 
   const fandoms = [
     { id: "bts", label: "BTS", emoji: "💜" },
@@ -34,7 +39,33 @@ const Settings = () => {
     );
   };
 
+  const handleSaveChanges = () => {
+    if (!name.trim()) {
+      toast.error("Please enter your name");
+      return;
+    }
+
+    if (selectedFandoms.length === 0) {
+      toast.error("Please select at least one fandom");
+      return;
+    }
+
+    if (user) {
+      const updatedUser = {
+        ...user,
+        name: name.trim(),
+        email,
+        fandoms: selectedFandoms,
+        isPrivate
+      };
+      setUser(updatedUser);
+      toast.success("Your settings have been saved! ✨");
+    }
+  };
+
   const handleLogout = () => {
+    setUser(null);
+    toast.success("You've been logged out. See you soon! 👋");
     navigate("/");
   };
 
@@ -48,6 +79,12 @@ const Settings = () => {
             <span className="font-bold text-xl bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
               Fandom Fusion
             </span>
+          </Link>
+          
+          <Link to="/dashboard">
+            <Button variant="outline" className="border-purple-200 text-purple-600 hover:bg-purple-50">
+              Back to Dashboard
+            </Button>
           </Link>
         </div>
       </nav>
@@ -101,6 +138,8 @@ const Settings = () => {
                   id="password"
                   type="password"
                   placeholder="Enter new password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   className="border-purple-200 focus:border-purple-400 bg-white/80"
                 />
               </div>
@@ -164,7 +203,10 @@ const Settings = () => {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3 rounded-full">
+            <Button 
+              onClick={handleSaveChanges}
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3 rounded-full"
+            >
               Save Changes
             </Button>
             

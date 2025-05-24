@@ -4,12 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Sparkles, ArrowLeft } from "lucide-react";
+import { Heart, Sparkles, ArrowLeft, BookOpen, Music, Quote, Castle } from "lucide-react";
+import { useApp } from "@/contexts/AppContext";
+import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
 
 const MoodLogger = () => {
   const [mood, setMood] = useState(3);
   const [journalEntry, setJournalEntry] = useState("");
+  const [showRecommendations, setShowRecommendations] = useState(false);
+  const [recommendations, setRecommendations] = useState<any>(null);
   const navigate = useNavigate();
+  const { addMoodEntry, user } = useApp();
 
   const moods = [
     { emoji: "😢", label: "Sad", value: 1 },
@@ -18,14 +24,111 @@ const MoodLogger = () => {
     { emoji: "😍", label: "Euphoric", value: 4 },
   ];
 
+  const generateRecommendations = (moodValue: number) => {
+    const moodRecommendations = {
+      1: { // Sad
+        bts: {
+          song: "Spring Day",
+          lyrics: "You know it all, you're my best friend, the morning will come again",
+          message: "Comfort for difficult times 💜"
+        },
+        marvel: {
+          quote: "Sometimes you gotta run before you can walk.",
+          character: "Tony Stark",
+          message: "Small steps toward healing ⚡"
+        },
+        disney: {
+          movie: "Inside Out",
+          quote: "Crying helps me slow down and obsess over the weight of life's problems",
+          message: "It's okay to feel sad sometimes 🌊"
+        }
+      },
+      2: { // Neutral
+        bts: {
+          song: "Mikrokosmos",
+          lyrics: "We shine in our own way, all of us are precious",
+          message: "Finding your sparkle 💜"
+        },
+        marvel: {
+          quote: "I can do this all day.",
+          character: "Steve Rogers",
+          message: "Steady determination ⚡"
+        },
+        disney: {
+          movie: "Moana",
+          quote: "The ocean chose you for a reason",
+          message: "Trust in your journey 🌊"
+        }
+      },
+      3: { // Happy
+        bts: {
+          song: "Dynamite",
+          lyrics: "Cause I-I-I'm in the stars tonight, so watch me bring the fire",
+          message: "Shining bright like a diamond 💜"
+        },
+        marvel: {
+          quote: "I am Iron Man.",
+          character: "Tony Stark",
+          message: "Confidence and power ⚡"
+        },
+        disney: {
+          movie: "The Lion King",
+          quote: "Hakuna Matata! What a wonderful phrase",
+          message: "No worries, be happy 🦁"
+        }
+      },
+      4: { // Euphoric
+        bts: {
+          song: "Euphoria",
+          lyrics: "You are the cause of my euphoria",
+          message: "Pure bliss and joy 💜"
+        },
+        marvel: {
+          quote: "I am inevitable.",
+          character: "Thanos (but in a good way!)",
+          message: "Unstoppable positive energy ⚡"
+        },
+        disney: {
+          movie: "Frozen",
+          quote: "Let it go, let it go! Can't hold it back anymore",
+          message: "Freedom and pure joy ❄️"
+        }
+      }
+    };
+
+    return moodRecommendations[moodValue as keyof typeof moodRecommendations];
+  };
+
   const generateFusion = () => {
-    // Navigate to dashboard with state to show recommendations
-    navigate("/dashboard", { state: { showRecommendations: true, mood, entry: journalEntry } });
+    if (!journalEntry.trim()) {
+      toast.error("Please write something about how you feel!");
+      return;
+    }
+
+    const recs = generateRecommendations(mood);
+    setRecommendations(recs);
+    setShowRecommendations(true);
+    toast.success("Your fandom fusion is ready! ✨");
   };
 
   const saveEntry = () => {
-    // Save entry logic
-    console.log("Saving entry:", { mood, journalEntry });
+    if (!journalEntry.trim()) {
+      toast.error("Please write something about how you feel!");
+      return;
+    }
+
+    const selectedMood = moods.find(m => m.value === mood);
+    const entry = {
+      id: Math.random().toString(36).substr(2, 9),
+      date: new Date().toISOString().split('T')[0],
+      mood,
+      moodEmoji: selectedMood?.emoji || "😊",
+      journalEntry,
+      recommendations: recommendations || undefined
+    };
+
+    addMoodEntry(entry);
+    toast.success("Your mood entry has been saved! 💜");
     navigate("/dashboard");
   };
 
@@ -120,23 +223,85 @@ const MoodLogger = () => {
         </Card>
 
         {/* Action Buttons */}
-        <div className="space-y-4">
-          <Button 
-            onClick={generateFusion}
-            className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-4 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300"
-          >
-            <Sparkles className="mr-2" size={20} />
-            Generate My Fandom Fusion
-          </Button>
+        {!showRecommendations ? (
+          <div className="space-y-4">
+            <Button 
+              onClick={generateFusion}
+              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-4 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <Sparkles className="mr-2" size={20} />
+              Generate My Fandom Fusion
+            </Button>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+              Your Personalized Fandom Fusion 💜
+            </h2>
 
-          <Button 
-            onClick={saveEntry}
-            variant="outline"
-            className="w-full border-purple-200 text-purple-600 hover:bg-purple-50 py-3 rounded-full text-lg"
-          >
-            Save My Entry
-          </Button>
-        </div>
+            {/* BTS Recommendation */}
+            <Card className="bg-white/60 backdrop-blur-sm border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center text-purple-600">
+                  <Music className="mr-2" size={24} />
+                  BTS Song for You
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <h3 className="text-xl font-semibold text-gray-800">{recommendations.bts.song}</h3>
+                  <p className="text-gray-600 italic">"{recommendations.bts.lyrics}"</p>
+                  <Badge className="bg-purple-100 text-purple-700">{recommendations.bts.message}</Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Marvel Recommendation */}
+            <Card className="bg-white/60 backdrop-blur-sm border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center text-blue-600">
+                  <Quote className="mr-2" size={24} />
+                  Marvel Inspiration
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <p className="text-lg text-gray-800">"{recommendations.marvel.quote}"</p>
+                  <p className="text-gray-600">- {recommendations.marvel.character}</p>
+                  <Badge className="bg-blue-100 text-blue-700">{recommendations.marvel.message}</Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Disney Recommendation */}
+            <Card className="bg-white/60 backdrop-blur-sm border-0 shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center text-pink-600">
+                  <Castle className="mr-2" size={24} />
+                  Disney Magic
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <h3 className="text-xl font-semibold text-gray-800">{recommendations.disney.movie}</h3>
+                  <p className="text-gray-600 italic">"{recommendations.disney.quote}"</p>
+                  <Badge className="bg-pink-100 text-pink-700">{recommendations.disney.message}</Badge>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Save Button */}
+            <div className="text-center">
+              <Button 
+                onClick={saveEntry}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-3 rounded-full text-lg"
+              >
+                <BookOpen className="mr-2" size={18} />
+                Save My Fusion Entry
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
