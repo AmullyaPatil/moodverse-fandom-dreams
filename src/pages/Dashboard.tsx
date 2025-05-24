@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,6 +78,49 @@ const Dashboard = () => {
           <p className="text-gray-600">
             Share your mood and let us create the perfect fandom fusion for you
           </p>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <Link to="/mood">
+            <Card className="bg-white/60 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer">
+              <CardContent className="p-6 text-center">
+                <div className="text-3xl mb-3">😊</div>
+                <h3 className="font-semibold text-gray-800 mb-2">Log Mood</h3>
+                <p className="text-sm text-gray-600">Track how you feel today</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/journal">
+            <Card className="bg-white/60 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer">
+              <CardContent className="p-6 text-center">
+                <div className="text-3xl mb-3">📚</div>
+                <h3 className="font-semibold text-gray-800 mb-2">View Journal</h3>
+                <p className="text-sm text-gray-600">Read past entries</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/moodboard">
+            <Card className="bg-white/60 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer">
+              <CardContent className="p-6 text-center">
+                <div className="text-3xl mb-3">🎨</div>
+                <h3 className="font-semibold text-gray-800 mb-2">Create Moodboard</h3>
+                <p className="text-sm text-gray-600">Design your feelings</p>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/community">
+            <Card className="bg-white/60 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 group cursor-pointer">
+              <CardContent className="p-6 text-center">
+                <div className="text-3xl mb-3">🌍</div>
+                <h3 className="font-semibold text-gray-800 mb-2">Visit Community</h3>
+                <p className="text-sm text-gray-600">Explore fan creations</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
 
         {/* Mood Selection */}

@@ -7,9 +7,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import MoodLogger from "./pages/MoodLogger";
 import MoodboardEditor from "./pages/MoodboardEditor";
 import JournalArchive from "./pages/JournalArchive";
 import Community from "./pages/Community";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,9 +26,11 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/mood" element={<MoodLogger />} />
           <Route path="/moodboard" element={<MoodboardEditor />} />
           <Route path="/journal" element={<JournalArchive />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
