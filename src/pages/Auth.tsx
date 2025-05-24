@@ -119,7 +119,7 @@ const Auth = () => {
                         <Checkbox 
                           id={fandom.id}
                           checked={selectedFandoms.includes(fandom.id)}
-                          onChange={() => handleFandomToggle(fandom.id)}
+                          onCheckedChange={() => handleFandomToggle(fandom.id)}
                         />
                         <span className="text-lg">{fandom.emoji}</span>
                         <Label htmlFor={fandom.id} className="text-sm font-medium cursor-pointer">
