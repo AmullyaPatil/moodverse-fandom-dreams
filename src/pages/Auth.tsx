@@ -109,12 +109,11 @@ const Auth = () => {
                     {fandoms.map((fandom) => (
                       <div 
                         key={fandom.id}
-                        className={`flex items-center space-x-2 p-3 rounded-lg border-2 cursor-pointer transition-all duration-200 hover-lift ${
+                        className={`flex items-center space-x-2 p-3 rounded-lg border-2 transition-all duration-200 hover-lift ${
                           selectedFandoms.includes(fandom.id)
                             ? "border-fantasy-400 bg-fantasy-50"
                             : "border-gray-200 hover:border-fantasy-200"
                         }`}
-                        onClick={() => handleFandomToggle(fandom.id)}
                       >
                         <Checkbox 
                           id={fandom.id}
